@@ -1,0 +1,10 @@
+{
+  "name": "Masked Model Replacement",
+  "version_number": "1.0.0",
+  "website_url": "",
+  "description": "When a masked enemy spawns from a vent, a random suit gets applied. This mod has ModelReplacementAPI support.",
+  "dependencies": [
+    "BepInEx-BepInExPack-5.4.2100",
+    "x753-More_Suits-1.5.1"
+  ]
+}
