@@ -20,9 +20,11 @@ namespace MaskedModelReplacement.Patches
         {
             if (!MaskedModelReplacementBase.modelReplacementPresent) {
                 var rand = new System.Random(StartOfRound.Instance.randomMapSeed + NumSpawnedThisLevel);
+                var suitList = StartOfRound.Instance.unlockablesList.unlockables;
 
                 var allSuits = Resources.FindObjectsOfTypeAll<UnlockableSuit>()
                     .Where(suit => suit.IsSpawned)
+                    .Where(suit => !MaskedModelReplacementBase.MaskedIgnoreSuits.Contains(suitList[suit.suitID].unlockableName.ToLower().Replace(" ", "")))
                     .ToArray();
 
 

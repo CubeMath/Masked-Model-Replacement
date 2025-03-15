@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Patches\MaskedPlayerEnemyPatch.cs" />
     <Compile Include="Patches\ModelReplacementPatch.cs" />
+    <Compile Include="Patches\StartOfRoundPatch.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

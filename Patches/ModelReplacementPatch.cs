@@ -43,27 +43,41 @@ namespace MaskedModelReplacement.Patches
                 var suitList = StartOfRound.Instance.unlockablesList.unlockables;
                 var allSuits = Resources.FindObjectsOfTypeAll<UnlockableSuit>()
                 .Where(suit => suit.IsSpawned)
+                .Where(suit => !MaskedModelReplacementBase.MaskedIgnoreSuits.Contains(suitList[suit.suitID].unlockableName.ToLower().Replace(" ", "")))
                 .ToArray();
-                int suitID = rand.Next(allSuits.Length);
 
-                string suitName = suitList[allSuits[suitID].suitID].unlockableName;
-                suitName = suitName.ToLower().Replace(" ", "");
+
                 
                 Dictionary<string, Type> regModelRepl = Traverse.Create(typeof(ModelReplacementAPI)).Field("RegisteredModelReplacements").GetValue() as Dictionary<string, Type>;
-                if (regModelRepl.ContainsKey(suitName))
+                    
+                if (MaskedModelReplacementBase.ModelReplacementsOnly)
                 {
-                    setReplacement = true;
-                    var hostPly = StartOfRound.Instance.allPlayerScripts[0];
-
-                    temporaryModel = hostPly.gameObject.AddComponent(regModelRepl[suitName]) as BodyReplacementBase;
-                    temporaryModel.suitName = suitName;
-                    modelReplacement = temporaryModel;
-                }
-                else {
-                    var target_suit = allSuits[suitID];
-                    ___enemyAI.SetSuit(target_suit.suitID);
+                    // filter further if ModelReplacementsOnly is set to true.
+                    allSuits = allSuits.Where(suit => regModelRepl.ContainsKey(suitList[suit.suitID].unlockableName.ToLower().Replace(" ", ""))).ToArray();
                 }
 
+                if (allSuits.Length > 0)
+                {
+                    int suitID = rand.Next(allSuits.Length);
+
+                    string suitName = suitList[allSuits[suitID].suitID].unlockableName;
+                    suitName = suitName.ToLower().Replace(" ", "");
+
+                    if (regModelRepl.ContainsKey(suitName))
+                    {
+                        setReplacement = true;
+                        var hostPly = StartOfRound.Instance.allPlayerScripts[0];
+
+                        temporaryModel = hostPly.gameObject.AddComponent(regModelRepl[suitName]) as BodyReplacementBase;
+                        temporaryModel.suitName = suitName;
+                        modelReplacement = temporaryModel;
+                    }
+                    else
+                    {
+                        var target_suit = allSuits[suitID];
+                        ___enemyAI.SetSuit(target_suit.suitID);
+                    }
+                }
                 NumSpawnedThisLevel++;
             }
 
