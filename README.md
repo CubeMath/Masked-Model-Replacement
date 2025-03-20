@@ -23,3 +23,12 @@ Comma separated list of suits that the masked enemy should be excluded.
 Example: "default, greensuit, hazardsuit, pajamasuit, purplesuit, beesuit"
 
 Use the **Log Available Suits** config to find out what the names of the suits are.
+
+## Preferred Suits per Moon
+Comma separated list of suits that the masked enemy should wear for specific moons.
+This setting will overwrite the "Masked Ignore Suits" configuration if entries matches for the current moon.
+Example: "assurance: greensuit hazardsuit pajamasuit,offense: purplesuit beesuit bunnysuit"
+
+# Thank you Mirage developers
+They added an option to turn off the ability to disable the *Copy masked visuals* on masked enemies.
+Masked-Model-Replacement will no longer break if you disable that option on Mirage.

@@ -18,7 +18,7 @@ namespace MaskedModelReplacement
     {
         private const string modGUID = "CubeMath.MaskedModelReplacementMod";
         private const string modName = "Masked Model Replacement";
-        private const string modVersion = "1.1.0.0";
+        private const string modVersion = "1.2.0.0";
 
         private readonly Harmony harmony = new Harmony(modGUID);
 
@@ -29,6 +29,7 @@ namespace MaskedModelReplacement
         public static bool LogAvailableSuits;
         public static bool ModelReplacementsOnly;
         public static List<string> MaskedIgnoreSuits;
+        public static List<List<string>> preferredSuits;
         public static List<string> RackHideSuits;
 
         void Awake() {
@@ -64,8 +65,29 @@ namespace MaskedModelReplacement
             ).Value;
             MaskedIgnoreSuits = mergedMaskedIgnoreSuits.ToLower().Replace(" ", "").Split(',').Select(s => s.Trim()).ToList();
             
-            
-            
+            string preferredSuitsPerMoon = Config.Bind(
+                "General", "Preferred Suits per Moon", "",
+                "Comma separated list of suits that the masked enemy should wear for specific moons.\n" +
+                "This setting will overwrite the \"Masked Ignore Suits\" configuration if entries matches for the current moon.\n" +
+                "Example: \"assurance: greensuit hazardsuit pajamasuit,offense: purplesuit beesuit bunnysuit\""
+            ).Value;
+            var preferredSuitsStrs = preferredSuitsPerMoon.ToLower().Split(',').Select(s => s.Trim()).ToList();
+
+            preferredSuits = new List<List<string>>();
+            preferredSuitsStrs.ForEach(suit_str => {
+                int colon_idx = suit_str.IndexOf(":");
+                if (colon_idx == -1) return;
+
+                List<string> single_suit_list = new List<string>{suit_str.Substring(0, colon_idx)};
+
+                suit_str = suit_str.Substring(colon_idx+1);
+                single_suit_list.AddRange(suit_str.Split(' ').Select(s => s.Trim()).ToList());
+
+                preferredSuits.Add(single_suit_list);
+            });
+
+
+
             harmony.PatchAll(typeof(MaskedModelReplacementBase));
             harmony.PatchAll(typeof(MaskedPlayerEnemyPatch));
             harmony.PatchAll(typeof(StartOfRoundPatch));

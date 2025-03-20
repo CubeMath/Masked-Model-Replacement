@@ -1,3 +1,6 @@
+# 1.2.0
+- Configuration added: Preferred Suits per Moon added
+
 # 1.1.0
 - Do you like configurations?
 - Config file added to filter the suits for the masked enemies

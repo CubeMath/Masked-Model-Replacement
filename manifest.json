@@ -1,6 +1,6 @@
 {
   "name": "Masked_Model_Replacement",
-  "version_number": "1.1.0",
+  "version_number": "1.2.0",
   "website_url": "https://github.com/CubeMath/Masked-Model-Replacement",
   "description": "When a masked enemy spawns from a vent, a random suit gets applied. This mod has ModelReplacementAPI support.",
   "dependencies": [

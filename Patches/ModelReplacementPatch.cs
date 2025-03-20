@@ -41,26 +41,46 @@ namespace MaskedModelReplacement.Patches
             {
                 var rand = new System.Random(StartOfRound.Instance.randomMapSeed + NumSpawnedThisLevel);
                 var suitList = StartOfRound.Instance.unlockablesList.unlockables;
-                var allSuits = Resources.FindObjectsOfTypeAll<UnlockableSuit>()
-                .Where(suit => suit.IsSpawned)
-                .Where(suit => !MaskedModelReplacementBase.MaskedIgnoreSuits.Contains(suitList[suit.suitID].unlockableName.ToLower().Replace(" ", "")))
-                .ToArray();
+                UnlockableSuit[] allSuits2 = null;
+                var allSuits = Resources.FindObjectsOfTypeAll<UnlockableSuit>().Where(suit => suit.IsSpawned);
+                int moon_id = MaskedPlayerEnemyPatch.Get_moon_id();
+
+                if (moon_id > -1)
+                {
+                    allSuits2 = allSuits
+                        .Where(suit => MaskedModelReplacementBase.preferredSuits[moon_id].Contains(suitList[suit.suitID].unlockableName.ToLower().Replace(" ", "")))
+                        .Where(suit => MaskedModelReplacementBase.preferredSuits[moon_id][0] != suitList[suit.suitID].unlockableName.ToLower().Replace(" ", ""))
+                        .ToArray();
+
+                    if (allSuits2.Length == 0)
+                    {
+                        allSuits2 = allSuits
+                            .Where(suit => !MaskedModelReplacementBase.MaskedIgnoreSuits.Contains(suitList[suit.suitID].unlockableName.ToLower().Replace(" ", "")))
+                            .ToArray();
+                    }
+                }
+                else
+                {
+                    allSuits2 = allSuits
+                        .Where(suit => !MaskedModelReplacementBase.MaskedIgnoreSuits.Contains(suitList[suit.suitID].unlockableName.ToLower().Replace(" ", "")))
+                        .ToArray();
+                }
 
 
-                
+
                 Dictionary<string, Type> regModelRepl = Traverse.Create(typeof(ModelReplacementAPI)).Field("RegisteredModelReplacements").GetValue() as Dictionary<string, Type>;
                     
                 if (MaskedModelReplacementBase.ModelReplacementsOnly)
                 {
                     // filter further if ModelReplacementsOnly is set to true.
-                    allSuits = allSuits.Where(suit => regModelRepl.ContainsKey(suitList[suit.suitID].unlockableName.ToLower().Replace(" ", ""))).ToArray();
+                    allSuits2 = allSuits2.Where(suit => regModelRepl.ContainsKey(suitList[suit.suitID].unlockableName.ToLower().Replace(" ", ""))).ToArray();
                 }
 
-                if (allSuits.Length > 0)
+                if (allSuits2.Length > 0)
                 {
-                    int suitID = rand.Next(allSuits.Length);
+                    int suitID = rand.Next(allSuits2.Length);
 
-                    string suitName = suitList[allSuits[suitID].suitID].unlockableName;
+                    string suitName = suitList[allSuits2[suitID].suitID].unlockableName;
                     suitName = suitName.ToLower().Replace(" ", "");
 
                     if (regModelRepl.ContainsKey(suitName))
@@ -74,7 +94,7 @@ namespace MaskedModelReplacement.Patches
                     }
                     else
                     {
-                        var target_suit = allSuits[suitID];
+                        var target_suit = allSuits2[suitID];
                         ___enemyAI.SetSuit(target_suit.suitID);
                     }
                 }
