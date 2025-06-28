@@ -1,6 +1,6 @@
 # 1.3.0
 - Configuration added: Use Shuffle per Moon
-- Bugfix: Hide ModelReplacementAPI-Masked wearing a mask
+- Bugfix: Hide mask from a ModelReplacementAPI-Masked
 
 # 1.2.0
 - Configuration added: Preferred Suits per Moon added
