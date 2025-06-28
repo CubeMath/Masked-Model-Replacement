@@ -18,6 +18,10 @@ Masked enemies should only pick model replacements and ignore all suits that doe
 The ModelReplacementAPI is a soft dependecy.
 When this configuration is enabled, the masked will only pick suits with a custom model.
 
+## Use Shuffle per Moon
+This setting causes the the random generator to use Shuffle instead of random only.
+The Shuffle-list will be cleared during each round begin
+
 ## Masked Ignore Suits
 Comma separated list of suits that the masked enemy should be excluded.
 Example: "default, greensuit, hazardsuit, pajamasuit, purplesuit, beesuit"

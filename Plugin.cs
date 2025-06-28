@@ -18,7 +18,7 @@ namespace MaskedModelReplacement
     {
         private const string modGUID = "CubeMath.MaskedModelReplacementMod";
         private const string modName = "Masked Model Replacement";
-        private const string modVersion = "1.2.0.0";
+        private const string modVersion = "1.3.0.0";
 
         private readonly Harmony harmony = new Harmony(modGUID);
 
@@ -28,9 +28,11 @@ namespace MaskedModelReplacement
 
         public static bool LogAvailableSuits;
         public static bool ModelReplacementsOnly;
+        public static bool ShufflePerMoon;
         public static List<string> MaskedIgnoreSuits;
         public static List<List<string>> preferredSuits;
         public static List<string> RackHideSuits;
+        public static List<int> ShuffleList;
 
         void Awake() {
             if (Instance == null) {
@@ -57,6 +59,14 @@ namespace MaskedModelReplacement
                 "General", "Model Replacements Only", false,
                 "Masked enemies should only pick model replacements and ignore all suits that does not have a model replacement."
             ).Value;
+
+            ShufflePerMoon = Config.Bind(
+                "General", "Use Shuffle per Moon", true,
+                "This setting causes the the random generator to use Shuffle instead of random only.\n" +
+                "The Shuffle-list will be cleared during each round begin.\n"
+            ).Value;
+
+
 
             string mergedMaskedIgnoreSuits = Config.Bind(
                 "General", "Masked Ignore Suits", "",
@@ -85,6 +95,8 @@ namespace MaskedModelReplacement
 
                 preferredSuits.Add(single_suit_list);
             });
+
+            ShuffleList = new List<int>();
 
 
 

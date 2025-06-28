@@ -26,7 +26,7 @@ namespace MaskedModelReplacement.Patches
             ___enemyAI = __instance.GetComponent<MaskedPlayerEnemy>();
             
             if (ModelReplacementAPI.MRAPI_NetworkingPresent) return false;
-            
+
             var mimicking = ___enemyAI.mimickingPlayer;
 
             bool setReplacement = false;
@@ -69,7 +69,7 @@ namespace MaskedModelReplacement.Patches
 
 
                 Dictionary<string, Type> regModelRepl = Traverse.Create(typeof(ModelReplacementAPI)).Field("RegisteredModelReplacements").GetValue() as Dictionary<string, Type>;
-                    
+                
                 if (MaskedModelReplacementBase.ModelReplacementsOnly)
                 {
                     // filter further if ModelReplacementsOnly is set to true.
@@ -78,7 +78,32 @@ namespace MaskedModelReplacement.Patches
 
                 if (allSuits2.Length > 0)
                 {
+                    if (MaskedModelReplacementBase.ShufflePerMoon)
+                    {
+                        List<UnlockableSuit> allSuits3_pre = new List<UnlockableSuit>();
+
+                        foreach (UnlockableSuit oneSuit in allSuits2)
+                        {
+                            if (!MaskedModelReplacementBase.ShuffleList.Contains(oneSuit.suitID))
+                            {
+                                allSuits3_pre.Add(oneSuit);
+                            }
+                        }
+
+                        if (allSuits3_pre.Count > 0)
+                        {
+                            allSuits2 = allSuits3_pre.ToArray();
+                        }
+                    }
+
                     int suitID = rand.Next(allSuits2.Length);
+
+                    if (MaskedModelReplacementBase.ShufflePerMoon)
+                    {
+                        MaskedModelReplacementBase.ShuffleList.Add(allSuits2[suitID].suitID);
+                    }
+
+
 
                     string suitName = suitList[allSuits2[suitID].suitID].unlockableName;
                     suitName = suitName.ToLower().Replace(" ", "");
@@ -132,10 +157,11 @@ namespace MaskedModelReplacement.Patches
             ___enemyAI.rendererLOD1.shadowCastingMode = ShadowCastingMode.Off;
             ___enemyAI.rendererLOD2.shadowCastingMode = ShadowCastingMode.Off;
 
-            // Remove Nametag
+            // Remove Nametag and Facemask
             MeshRenderer[] gameObjects = ___enemyAI.gameObject.GetComponentsInChildren<MeshRenderer>();
             gameObjects.Where(x => x.gameObject.name == "LevelSticker").First().enabled = false;
             gameObjects.Where(x => x.gameObject.name == "BetaBadge").First().enabled = false;
+            gameObjects.Where(x => x.gameObject.name == "ComedyMaskLOD1").First().transform.parent.gameObject.SetActive(false);
 
             if (temporaryModel != null) {
                 temporaryModel.IsActive = false;

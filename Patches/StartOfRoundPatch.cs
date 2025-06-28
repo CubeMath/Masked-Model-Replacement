@@ -33,5 +33,15 @@ namespace MaskedModelReplacement.Patches
 
             MaskedModelReplacementBase.Instance.Logger.LogInfo(sb);
         }
+
+        [HarmonyPatch(typeof(StartOfRound), "StartGame")]
+        [HarmonyPostfix]
+        public static void StartOfRound_StartGame_SuitPatch(StartOfRound __instance)
+        {
+            if (!MaskedModelReplacementBase.ShufflePerMoon) return;
+
+            MaskedModelReplacementBase.ShuffleList = new List<int>();
+        }
+
     }
 }
