@@ -1,3 +1,6 @@
+# 1.3.1
+- Bugfix: Masked no longer messes with models on the player
+
 # 1.3.0
 - Configuration added: Use Shuffle per Moon
 - Bugfix: Hide mask from a ModelReplacementAPI-Masked
