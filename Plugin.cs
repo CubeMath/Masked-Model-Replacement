@@ -18,7 +18,7 @@ namespace MaskedModelReplacement
     {
         private const string modGUID = "CubeMath.MaskedModelReplacementMod";
         private const string modName = "Masked Model Replacement";
-        private const string modVersion = "1.3.0.0";
+        private const string modVersion = "1.3.1.0";
 
         private readonly Harmony harmony = new Harmony(modGUID);
 

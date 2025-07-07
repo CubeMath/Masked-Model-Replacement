@@ -163,10 +163,13 @@ namespace MaskedModelReplacement.Patches
             gameObjects.Where(x => x.gameObject.name == "BetaBadge").First().enabled = false;
             gameObjects.Where(x => x.gameObject.name == "ComedyMaskLOD1").First().transform.parent.gameObject.SetActive(false);
 
+            // Commented out because removing the temporary model seems to break the models on the player-characters.
+            /*
             if (temporaryModel != null) {
                 temporaryModel.IsActive = false;
                 GameObject.Destroy(temporaryModel); // Destroy the existing body replacement
             }
+            */
 
             return false; // Skip original
         }
