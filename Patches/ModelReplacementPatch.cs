@@ -24,7 +24,7 @@ namespace MaskedModelReplacement.Patches
         private static bool Awake(ModelReplacement.Monobehaviors.Enemies.MaskedReplacementBase __instance, ref MaskedPlayerEnemy ___enemyAI)
         {
             ___enemyAI = __instance.GetComponent<MaskedPlayerEnemy>();
-            
+
             if (ModelReplacementAPI.MRAPI_NetworkingPresent) return false;
 
             var mimicking = ___enemyAI.mimickingPlayer;
@@ -69,7 +69,7 @@ namespace MaskedModelReplacement.Patches
 
 
                 Dictionary<string, Type> regModelRepl = Traverse.Create(typeof(ModelReplacementAPI)).Field("RegisteredModelReplacements").GetValue() as Dictionary<string, Type>;
-                
+
                 if (MaskedModelReplacementBase.ModelReplacementsOnly)
                 {
                     // filter further if ModelReplacementsOnly is set to true.
@@ -116,6 +116,16 @@ namespace MaskedModelReplacement.Patches
                         temporaryModel = hostPly.gameObject.AddComponent(regModelRepl[suitName]) as BodyReplacementBase;
                         temporaryModel.suitName = suitName;
                         modelReplacement = temporaryModel;
+
+                        modelReplacement.SetAvatarRenderers(false);
+
+                        if (modelReplacement.replacementModelShadow != null)
+                        {
+                            foreach (Renderer r in modelReplacement.replacementModelShadow.GetComponentsInChildren<Renderer>())
+                            {
+                                r.enabled = false;
+                            }
+                        }
                     }
                     else
                     {

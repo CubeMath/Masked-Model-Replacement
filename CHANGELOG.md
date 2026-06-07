@@ -1,3 +1,6 @@
+# 1.3.2
+- Bugfix: Prevent flicker when masked with ModelReplacementAPI model spawns
+
 # 1.3.1
 - Bugfix: Masked no longer messes with models on the player
 
